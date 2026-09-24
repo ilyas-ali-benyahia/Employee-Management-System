@@ -3,6 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import { connectDB } from './config/db.js'
 import employeeRoutes from './routes/employeeRoutes.js'
+import authRoutes from './routes/authRoutes.js'
 
 dotenv.config() // reads the .env file
 
@@ -14,6 +15,7 @@ app.use(express.json()) // parses JSON sent in request bodies (POST/PUT)
 
 // --- Routes ---
 app.use('/api/employees', employeeRoutes)
+app.use('/api/auth', authRoutes)
 
 // Simple route to confirm the server is running
 app.get('/', (req, res) => {

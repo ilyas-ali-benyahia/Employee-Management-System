@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-
-const API_URL = 'http://localhost:5500/api/employees'
+import { apiRequest } from '../services/apiClient'
 
 // ============================================================
 // PART 1 — the backend connection.
@@ -10,31 +9,17 @@ const API_URL = 'http://localhost:5500/api/employees'
 // give back whatever the backend actually saved.
 // ============================================================
 async function addEmployeeToDB(employee) {
-  const response = await fetch(API_URL, {
+  return apiRequest('/employees', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(employee),
   })
-
-  if (!response.ok) {
-    throw new Error('Could not add employee. Please check the fields and try again.')
-  }
-
-  return response.json()
 }
 
 async function updateEmployeeInDB(id, employee) {
-  const response = await fetch(`${API_URL}/${id}`, {
+  return apiRequest(`/employees/${id}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(employee),
   })
-
-  if (!response.ok) {
-    throw new Error('Could not update employee. Please check the fields and try again.')
-  }
-
-  return response.json()
 }
 
 // ============================================================
@@ -56,6 +41,7 @@ export function EmployeeForm({ editingEmployee, onSaved, onCancelEdit }) {
 
   // Whenever App.jsx asks us to edit a different employee (or to stop
   // editing, by passing null), we refill the form to match.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (editingEmployee) {
       setName(editingEmployee.name)
@@ -70,6 +56,7 @@ export function EmployeeForm({ editingEmployee, onSaved, onCancelEdit }) {
     }
     setError(null)
   }, [editingEmployee])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   async function handleSubmit(event) {
     event.preventDefault() // stop the page from refreshing

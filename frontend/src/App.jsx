@@ -1,20 +1,11 @@
 import { useEffect, useState } from 'react'
 import { EmployeeForm } from './components/EmployeeForm'
 import { EmployeeList } from './components/EmployeeList'
-
-const API_URL = 'http://localhost:5500/api/employees'
-
-async function getEmployeesFromDB() {
-  const response = await fetch(API_URL)
-
-  if (!response.ok) {
-    throw new Error('Could not load employees. Is the backend server running?')
-  }
-
-  return response.json()
-}
+import { apiRequest } from './services/apiClient'
+import { useAuth } from './context/useAuth'
 
 function App() {
+  const { user, logout } = useAuth()
   const [employees, setEmployees] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -23,7 +14,7 @@ function App() {
   const [departmentFilter, setDepartmentFilter] = useState('All departments')
 
   useEffect(() => {
-    getEmployeesFromDB()
+    apiRequest('/employees')
       .then((data) => setEmployees(data))
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false))
@@ -68,6 +59,10 @@ function App() {
         <div className="team-count">
           <strong>{employees.length}</strong>
           <span>team members</span>
+        </div>
+        <div className="user-menu">
+          <span>{user?.name}</span>
+          <button type="button" className="logout-button" onClick={logout}>Sign out</button>
         </div>
       </header>
 

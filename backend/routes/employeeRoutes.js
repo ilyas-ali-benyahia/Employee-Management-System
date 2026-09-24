@@ -6,8 +6,11 @@ import {
   updateEmployee,
   deleteEmployee,
 } from '../controllers/employeeController.js'
+import { protect } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
+
+router.use(protect)
 
 // Each line here means: "When a request comes in this format, run this function"
 router.get('/', getEmployees) // GET    /api/employees

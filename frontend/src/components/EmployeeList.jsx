@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5500/api/employees'
+import { apiRequest } from '../services/apiClient'
 
 // ============================================================
 // PART 1 — the backend connection.
@@ -6,13 +6,9 @@ const API_URL = 'http://localhost:5500/api/employees'
 // employee by id.
 // ============================================================
 async function deleteEmployeeFromDB(id) {
-  const response = await fetch(`${API_URL}/${id}`, {
+  await apiRequest(`/employees/${id}`, {
     method: 'DELETE',
   })
-
-  if (!response.ok) {
-    throw new Error('Could not delete employee')
-  }
 }
 
 // ============================================================
